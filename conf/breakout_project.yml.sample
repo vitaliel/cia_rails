@@ -1,0 +1,10 @@
+# file should have [project_name]_project.yml name
+
+:name: breakout
+
+:scm: git
+:scm_url: git://git.assembla.com/breakout.git
+:home_dir: /home/lz/tmp/cia/breakout
+:qa_email: qa@example.com
+# revision will be added to the url
+:changeset_url: http://code.assembla.com/breakout/git/

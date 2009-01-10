@@ -1,0 +1,26 @@
+= Cia Rails
+
+Continuous Integration(CI) builder for Rails applications, very simple, no database is needed for runtime.
+
+= Install
+
+* Download sources, unpack.
+* Update conf/cia_rails with different work_dir as needed
+* Create some project config files in conf directory
+* Run:
+$ ./bin/cia_rails
+
+You may also add a cron job:
+
+cd /path/to/cia_rails/dir
+./bin/cia_rails
+
+= TODO
+
+* Send mail only to developers that broke the build
+* Create a debian package and a ruby gem
+
+= Licence
+
+MIT Licence
+Copyright (c) 2008-2009 Vitalie Lazu, vitalie.lazu[at]gmail[dot]com
