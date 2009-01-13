@@ -35,7 +35,7 @@ class CiaRails::Builder
       end
 
       Dir.chdir(project[:home_dir])
-      update_sources
+      ignore_logs { update_sources }
 
       if @vcs.changed?
         add_scm_log
@@ -55,8 +55,7 @@ class CiaRails::Builder
   end
 
   def ignore_logs(&block)
-    buf = @output
-    @output = ""
+    buf = @output.clone
     yield
     # if no exceptions
     @output = buf
@@ -68,6 +67,7 @@ class CiaRails::Builder
 
   def load_state
     @config = YAML::load_file(state_file)
+    @old_state = config[:state]
   end
 
   def config
@@ -117,13 +117,13 @@ class CiaRails::Builder
   def send_notifications(event)
     subject = nil
 
-    if event == config[:state]
+    if event == @old_state
       # Do not send notifications if build state was not changed
       return
     end
 
     if event == :ok
-      if config[:state] == :failed
+      if @old_state == :failed
         subject = "Build is fixed"
       end
     elsif event == :failed

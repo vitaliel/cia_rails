@@ -32,7 +32,7 @@ class CiaRails::Command
           @cb.call data
         end
 
-        break if @finish
+        break if @finish && r.nil?
       end
     end
   end

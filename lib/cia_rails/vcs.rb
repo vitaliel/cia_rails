@@ -42,7 +42,7 @@ module CiaRails
       cmd = "git whatchanged "
 
       if last_revision
-        cmd << "\"HEAD..#{last_revision}\""
+        cmd << "\"#{last_revision}..HEAD\""
       else
         cmd << "-1"
       end
