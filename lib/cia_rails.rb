@@ -19,10 +19,20 @@ module CiaRails
         config.update(YAML.load_file(conf_file))
       end
 
-      for project_conf_file in Dir["#{conf_dir}/*_project.yml"]
+      config[:conf_dir] = conf_dir
+
+      if config[:operation] == "deploy"
+        run config, :deploy
+      else
+        run config, :build
+      end
+    end
+
+    def run(config, operation)
+      for project_conf_file in Dir["#{config[:conf_dir]}/*_project.yml"]
         builder = CiaRails::Builder.new(YAML.load_file(project_conf_file))
         builder.work_dir = config[:work_dir]
-        builder.build
+        builder.send(operation)
       end
     end
   end

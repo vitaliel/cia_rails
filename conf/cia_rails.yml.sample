@@ -1,2 +1,5 @@
 # Where projects state will be saved, each project will have a separate directory
 :work_dir: /var/tmp/cia_rails
+
+# uncomment for stage deploy
+:operation: deploy

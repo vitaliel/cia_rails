@@ -57,7 +57,7 @@ module CiaRails
     end
 
     def revision
-      raise "Not implemented"
+      @revision ||= @parent.run_cmd("svn info | grep Revision | awk '{print $2}'")
     end
   end
 end

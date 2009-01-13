@@ -14,13 +14,36 @@ class CiaRails::Builder
   def initialize(prj)
     @project = prj
     reset_buffer
+    @operation = "Build"
   end
 
   def reset_buffer
     @output = ""
   end
 
+  # Used to deploy to stage server
+  def deploy
+    @operation = "Deploy"
+
+    prepare_local_dir do
+      run_cmd "cap -q deploy"
+      run_cmd "cap -q deploy:migrate"
+      run_cmd "cap -q deploy:cleanup"
+    end
+  end
+
+  # Verify tests
   def build
+    prepare_local_dir do
+      add_scm_log
+      # TODO install new gems
+      # TODO install new Debian packages
+      ignore_logs { prepare_db }
+      run_tests
+    end
+  end
+
+  def prepare_local_dir # yields
     self.state_dir = File.join(work_dir, project[:name])
     self.state_file = File.join(state_dir, "state.yml")
 
@@ -38,11 +61,7 @@ class CiaRails::Builder
       ignore_logs { update_sources }
 
       if @vcs.changed?
-        add_scm_log
-        # TODO install new gems
-        # TODO install new Debian packages
-        ignore_logs { prepare_db }
-        run_tests
+        yield
       end
     rescue BuildError
       state = :failed
@@ -124,17 +143,17 @@ class CiaRails::Builder
 
     if event == :ok
       if @old_state == :failed
-        subject = "Build is fixed"
+        subject = "#{@operation} is fixed"
       end
     elsif event == :failed
-      subject = "Build failed"
+      subject = "#{@operation} failed"
     else
       raise "bad event"
     end
 
     if subject
       # TODO send to developers that committed changes
-      IO::popen("mail -s '#{subject}' #{project[:qa_email]}", "w") do |io|
+      IO::popen("mail -s '[#{project[:name]}] #{subject}' #{project[:qa_email]}", "w") do |io|
         io.write(@output)
       end
     end
