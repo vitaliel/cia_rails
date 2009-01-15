@@ -21,6 +21,10 @@ class CiaRails::Builder
     @output = ""
   end
 
+  def add_line(line)
+    @output << line << "\n"
+  end
+
   # Used to deploy to stage server
   def deploy
     @operation = "Deploy"
@@ -152,8 +156,15 @@ class CiaRails::Builder
     end
 
     if subject
-      # TODO send to developers that committed changes
-      IO::popen("mail -s '[#{project[:name]}] #{subject}' #{project[:qa_email]}", "w") do |io|
+      if @vcs.emails.include?(project[:qa_email])
+        extra = ""
+      else
+        extra = "-c #{project[:qa_email]}"
+      end
+
+      emails = @vcs.pretty_emails.map { |item| "\"#{item}\""}.join ' '
+
+      IO::popen("mail -s '[QA] [#{project[:name]}] #{subject}' #{extra} #{emails}", "w") do |io|
         io.write(@output)
       end
     end
