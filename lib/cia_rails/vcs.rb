@@ -138,7 +138,7 @@ module CiaRails
     end
 
     def revision
-      @revision ||= @parent.run_cmd("svn info | grep Revision | awk '{print $2}'")
+      @revision ||= `svn info | grep Revision | awk '{print $2}'`.strip
     end
   end
 end
