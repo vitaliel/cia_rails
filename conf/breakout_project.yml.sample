@@ -8,3 +8,7 @@
 :qa_email: qa@example.com
 # revision will be added to the url
 :changeset_url: http://code.assembla.com/breakout/git/
+
+# Non rails project
+#:type: lib
+#:build_cmd: spec spec

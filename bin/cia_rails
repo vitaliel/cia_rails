@@ -4,7 +4,7 @@ if ARGV.size > 0
   conf_dir = ARGV[0]
 else
   # dev version
-  base = File.dirname(__FILE__)
+  base = File.expand_path File.dirname(__FILE__)
   $:.unshift "#{base}/../lib"
   conf_dir = "#{base}/../conf"
 end

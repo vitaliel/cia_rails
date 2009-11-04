@@ -42,9 +42,29 @@ class CiaRails::Builder
       add_scm_log
       # TODO install new gems
       # TODO install new Debian packages
-      ignore_logs { prepare_db }
+      ignore_logs { prepare_env }
+      run_build
+    end
+  end
+
+  def run_build
+    unless rails?
+      run_cmd(project[:build_cmd])
+    else
       run_tests
     end
+  end
+
+  def prepare_env
+    unless rails?
+      # TODO
+    else
+      prepare_db
+    end
+  end
+
+  def rails?
+    ! (project[:type] && project[:type] != "rails")
   end
 
   def prepare_local_dir # yields
