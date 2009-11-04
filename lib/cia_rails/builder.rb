@@ -149,7 +149,10 @@ class CiaRails::Builder
 
     run_cmd("mysqladmin drop -f \"#{dev['database']}\"", true)
     run_cmd("mysqladmin create \"#{dev['database']}\"")
-    run_cmd("mysqladmin create \"#{rails_config['test']['database']}\"", true)
+
+    run_cmd("mysqladmin drop \"#{rails_config['test']['database']}\"", true)
+    run_cmd("mysqladmin create \"#{rails_config['test']['database']}\"")
+
     run_cmd("rake db:migrate --trace")
   end
 
