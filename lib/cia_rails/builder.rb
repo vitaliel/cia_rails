@@ -28,11 +28,12 @@ class CiaRails::Builder
   # Used to deploy to stage server
   def deploy
     @operation = "Deploy"
+    build_env = project[:build_env] || ""
 
     prepare_local_dir do
-      run_cmd "cap -q deploy"
-      run_cmd "cap -q deploy:migrate"
-      run_cmd "cap -q deploy:cleanup"
+      run_cmd "cap -q deploy #{build_env}"
+      run_cmd "cap -q deploy:migrate #{build_env}"
+      run_cmd "cap -q deploy:cleanup #{build_env}"
     end
   end
 

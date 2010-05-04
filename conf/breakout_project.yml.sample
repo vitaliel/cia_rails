@@ -8,7 +8,8 @@
 :qa_email: qa@example.com
 # revision will be added to the url
 :changeset_url: http://code.assembla.com/breakout/git/
-
+# this specifies build environment, for example to SITES
+#:build_env: SITES=1
 # Non rails project
 #:type: lib
 #:build_cmd: spec spec
